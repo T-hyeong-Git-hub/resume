@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이력서 페이지</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0a192f;
+            --light-navy: #112240;
+            --lightest-navy: #233554;
+            --navy-shadow: rgba(2, 12, 27, 0.7);
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --white: #e6f1ff;
+            --green: #64ffda;
+            --green-tint: rgba(100, 255, 218, 0.1);
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+            --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            --fz-xxs: 12px;
+            --fz-xs: 13px;
+            --fz-sm: 14px;
+            --fz-md: 16px;
+            --fz-lg: 18px;
+            --fz-xl: 20px;
+            --fz-xxl: 22px;
+            --fz-heading: 32px;
+            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+            --tab-height: 42px;
+            --tab-width: 120px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--navy);
+            color: var(--slate);
+            line-height: 1.6;
+            font-size: var(--fz-lg);
+        }
+
+        /* 좌측 고정 네비 (데스크톱) - brittanychiang 스타일 */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 140px;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 0 40px 40px;
+        }
+
+        .nav-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+            padding-left: 20px;
+            margin-left: 8px;
+            border-left: 1px solid rgba(136, 146, 176, 0.3);
+        }
+
+        /* 하단 짧은 세로선 (brittanychiang 스타일) */
+        .nav-inner::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 90px;
+            background: var(--light-slate);
+            opacity: 0.3;
+            margin-left: -21px;
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: var(--fz-sm);
+            letter-spacing: 0.05em;
+            color: var(--light-slate);
+            text-decoration: none;
+            padding: 10px 0;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--green);
+            transform: translateY(-3px);
+        }
+
+        /* 상단 네비 (모바일) */
+        .nav-top {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-top.hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav-top .nav-logo {
+            font-family: var(--font-mono);
+            font-size: var(--fz-md);
+            font-weight: 500;
+            color: var(--green);
+        }
+
+        .nav-top .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+
+        .nav-top .nav-links a {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--light-slate);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-top .nav-links a:hover {
+            color: var(--green);
+        }
+
+        @media (max-width: 768px) {
+            .nav-wrapper { display: none; }
+            .nav-top { display: flex; }
+        }
+
+        /* 메인 레이아웃 */
+        .main-content {
+            margin-left: 140px;
+            min-height: 100vh;
+            padding: 0 150px 120px 150px;
+        }
+
+        @media (max-width: 1080px) {
+            .main-content { padding: 0 100px 80px 100px; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 80px 24px 80px 24px;
+            }
+        }
+
+        /* 히어로 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .hero .greeting {
+            font-family: var(--font-mono);
+            font-size: var(--fz-md);
+            color: var(--green);
+            margin-bottom: 20px;
+        }
+
+        .hero .big-heading {
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 600;
+            color: var(--lightest-slate);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+
+        .hero .big-heading .highlight {
+            color: var(--slate);
+            display: block;
+            font-size: clamp(24px, 5vw, 40px);
+            font-weight: 400;
+        }
+
+        .hero .subtitle {
+            max-width: 540px;
+            margin-top: 24px;
+            color: var(--slate);
+            font-size: var(--fz-lg);
+            line-height: 1.5;
+        }
+
+        .hero .cta-wrapper {
+            margin-top: 48px;
+        }
+
+        .hero .cta {
+            font-family: var(--font-mono);
+            font-size: var(--fz-sm);
+            color: var(--green);
+            text-decoration: none;
+            padding: 16px 28px;
+            border: 1px solid var(--green);
+            border-radius: 4px;
+            transition: var(--transition);
+            display: inline-block;
+        }
+
+        .hero .cta:hover {
+            background: var(--green-tint);
+        }
+
+        /* 섹션 공통 */
+        section {
+            max-width: 700px;
+            margin: 0 auto 100px;
+        }
+
+        section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-num {
+            font-family: var(--font-mono);
+            font-size: var(--fz-md);
+            color: var(--green);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-num::after {
+            content: '';
+            display: block;
+            width: 300px;
+            max-width: 100%;
+            height: 1px;
+            background: var(--lightest-navy);
+        }
+
+        .section-title {
+            font-size: clamp(28px, 5vw, 32px);
+            font-weight: 600;
+            color: var(--lightest-slate);
+            margin-bottom: 40px;
+        }
+
+        /* About / 인적사항 */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; gap: 24px; }
+        }
+
+        .profile-avatar {
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 1;
+            border-radius: 4px;
+            background: var(--light-navy);
+            border: 2px solid var(--lightest-navy);
+            position: relative;
+            overflow: hidden;
+            display: block;
+        }
+
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 2px solid var(--green);
+            border-radius: 4px;
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-text p {
+            color: var(--light-slate);
+            margin-bottom: 16px;
+            font-size: var(--fz-md);
+        }
+
+        .about-text .info-list {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .about-text .info-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--lightest-navy);
+            display: flex;
+            gap: 16px;
+            font-size: var(--fz-sm);
+        }
+
+        .about-text .info-list li:last-child { border-bottom: none; }
+
+        .info-label {
+            font-family: var(--font-mono);
+            color: var(--slate);
+            min-width: 80px;
+        }
+
+        .info-value {
+            color: var(--light-slate);
+        }
+
+        /* 타임라인 (학력/경력) */
+        .job-list, .edu-list {
+            list-style: none;
+        }
+
+        .job-item, .edu-item {
+            position: relative;
+            padding-left: 28px;
+            padding-bottom: 32px;
+        }
+
+        .job-item:last-child, .edu-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .job-item::before, .edu-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 2px;
+            height: calc(100% - 8px);
+            background: var(--lightest-navy);
+        }
+
+        .job-item::after, .edu-item::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: 8px;
+            width: 10px;
+            height: 10px;
+            background: var(--green);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px var(--navy);
+        }
+
+        .job-header, .edu-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 8px 16px;
+            margin-bottom: 8px;
+        }
+
+        .job-title, .edu-title {
+            color: var(--lightest-slate);
+            font-size: var(--fz-lg);
+            font-weight: 500;
+        }
+
+        .job-company, .edu-school {
+            font-family: var(--font-mono);
+            font-size: var(--fz-sm);
+            color: var(--green);
+        }
+
+        .job-range, .edu-range {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--slate);
+        }
+
+        .job-desc, .edu-desc {
+            color: var(--light-slate);
+            font-size: var(--fz-sm);
+            line-height: 1.6;
+        }
+
+        /* 스킬 */
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-tag {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xs);
+            color: var(--light-slate);
+            padding: 8px 14px;
+            background: var(--light-navy);
+            border: 1px solid var(--lightest-navy);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .skill-tag:hover {
+            border-color: var(--green);
+            color: var(--green);
+            transform: translateY(-2px);
+        }
+
+        /* 연락처 */
+        .contact-text {
+            color: var(--light-slate);
+            font-size: var(--fz-md);
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .contact-links a {
+            font-family: var(--font-mono);
+            font-size: var(--fz-sm);
+            color: var(--green);
+            text-decoration: none;
+            padding: 16px 24px;
+            border: 1px solid var(--green);
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .contact-links a:hover {
+            background: var(--green-tint);
+        }
+
+        /* 푸터 */
+        footer {
+            text-align: center;
+            padding: 24px;
+            margin-top: 80px;
+        }
+
+        footer a {
+            font-family: var(--font-mono);
+            font-size: var(--fz-xxs);
+            color: var(--slate);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        footer a:hover {
+            color: var(--green);
+        }
+
+        /* 스크롤 페이드인 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 인쇄 */
+        @media print {
+            .nav-wrapper, .nav-top, .cta-wrapper, .hero .cta { display: none !important; }
+            .main-content { margin-left: 0; padding: 24px; }
+            body { background: #fff; color: #333; }
+            .hero .big-heading, .section-title, .job-title, .edu-title { color: #111; }
+            .hero .greeting, .section-num, .job-company, .edu-school, .skill-tag { color: #333; }
+            .profile-avatar { border-color: #ddd; color: #333; }
+            .job-item::after, .edu-item::after { background: #333; }
+            .contact-links a { color: #333; border-color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 좌측 네비 (데스크톱) -->
+    <nav class="nav-wrapper" aria-label="메인 네비게이션">
+        <div class="nav-inner">
+            <a href="#about" class="nav-link">소개</a>
+            <a href="#education" class="nav-link">학력</a>
+            <a href="#career" class="nav-link">경력</a>
+            <a href="#skills" class="nav-link">스킬</a>
+            <a href="#contact" class="nav-link">연락처</a>
+        </div>
+    </nav>
+
+    <!-- 상단 네비 (모바일) -->
+    <header class="nav-top" id="nav-top">
+        <span class="nav-logo"></span>
+        <ul class="nav-links">
+            <li><a href="#about">소개</a></li>
+            <li><a href="#education">학력</a></li>
+            <li><a href="#career">경력</a></li>
+            <li><a href="#skills">스킬</a></li>
+            <li><a href="#contact">연락처</a></li>
+        </ul>
+    </header>
+
+    <main class="main-content">
+        <header class="hero">
+            <p class="greeting fade-in">안녕하세요, 제 이름은</p>
+            <h1 class="big-heading fade-in">입니다.</h1>
+            <span class="big-heading highlight fade-in">이력서 & 자기소개</span>
+            <p class="subtitle fade-in">
+                디자인과 코드에 관심이 많고, 사용자 경험을 중시하는 개발자/디자이너입니다.
+                (PDF 이력서 내용에 맞게 수정해 주세요.)
+            </p>
+            <div class="cta-wrapper fade-in">
+                <a href="#about" class="cta">더 알아보기</a>
+            </div>
+        </header>
+
+        <section id="about">
+            <p class="section-num">01. 소개</p>
+            <h2 class="section-title">인적사항 & 자기소개</h2>
+            <div class="about-grid">
+                <div class="profile-avatar">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5Ob-UOPtgjnKcyhIInu3V41-2G2AHZjXIrQ&s" alt="김태형 프로필" />
+                </div>
+                <div class="about-text">
+                    <p>
+                        안녕하세요. 입니다. (여기에 PDF 이력서의 자기소개 또는 경력 요약 내용을 입력해 주세요.)
+                    </p>
+                    <p>
+                        저는 ○○ 분야에 관심이 많으며, △△ 경험을 바탕으로 귀사에 기여하고 싶습니다.
+                    </p>
+                    <ul class="info-list">
+                        <li><span class="info-label">이름</span><span class="info-value">이름</span></li>
+                        <li><span class="info-label">생년월일</span><span class="info-value">YYYY.MM.DD</span></li>
+                        <li><span class="info-label">주소</span><span class="info-value">서울특별시 ○○구 ○○동</span></li>
+                        <li><span class="info-label">연락처</span><span class="info-value">010-XXXX-XXXX</span></li>
+                        <li><span class="info-label">이메일</span><span class="info-value">example@email.com</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="education">
+            <p class="section-num">02. 학력</p>
+            <h2 class="section-title">학력</h2>
+            <ul class="edu-list">
+                <li class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">○○대학교 ○○학과</span>
+                        <span class="edu-range">20XX.03 ~ 20XX.02</span>
+                    </div>
+                    <p class="edu-desc">학사 졸업 (또는 재학 중)</p>
+                </li>
+                <li class="edu-item">
+                    <div class="edu-header">
+                        <span class="edu-title">○○고등학교</span>
+                        <span class="edu-range">20XX.03 ~ 20XX.02</span>
+                    </div>
+                    <p class="edu-desc">졸업</p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="career">
+            <p class="section-num">03. 경력</p>
+            <h2 class="section-title">경력 / 프로젝트</h2>
+            <ul class="job-list">
+                <li class="job-item">
+                    <div class="job-header">
+                        <span class="job-title">○○ 직무</span>
+                        <span class="job-company">@ (주)○○</span>
+                    </div>
+                    <span class="job-range">20XX.XX ~ 20XX.XX</span>
+                    <p class="job-desc">담당 업무 및 성과를 간단히 작성합니다.</p>
+                </li>
+                <li class="job-item">
+                    <div class="job-header">
+                        <span class="job-title">○○ 프로젝트</span>
+                    </div>
+                    <span class="job-range">20XX.XX ~ 20XX.XX</span>
+                    <p class="job-desc">프로젝트 설명 및 역할, 사용 기술 등을 작성합니다.</p>
+                </li>
+            </ul>
+        </section>
+
+        <section id="skills">
+            <p class="section-num">04. 스킬</p>
+            <h2 class="section-title">스킬 & 자격증</h2>
+            <p class="about-text" style="margin-bottom: 24px;">보유 기술이나 자격증을 태그로 추가할 수 있습니다.</p>
+            <div class="skills-list">
+                <span class="skill-tag">HTML/CSS</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">○○ 자격증</span>
+                <span class="skill-tag">○○ 툴</span>
+            </div>
+        </section>
+
+        <section id="contact">
+            <p class="section-num">05. 연락처</p>
+            <h2 class="section-title">연락처</h2>
+            <p class="contact-text">관련 문의가 있으시면 아래로 연락 주세요.</p>
+            <div class="contact-links">
+                <a href="mailto:example@email.com">이메일 보내기</a>
+                <a href="tel:010-0000-0000">전화 걸기</a>
+            </div>
+        </section>
+
+        <footer>
+            <a href="#">© 2026 이름</a>
+        </footer>
+    </main>
+
+    <script>
+        // 스크롤 시 모바일 네비 숨김/표시
+        let lastScroll = 0;
+        const navTop = document.getElementById('nav-top');
+
+        window.addEventListener('scroll', function() {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 200) {
+                navTop.classList.toggle('hidden', currentScroll > lastScroll);
+            } else {
+                navTop.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+
+        // 스크롤 페이드인
+        const fadeEls = document.querySelectorAll('.fade-in');
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+        fadeEls.forEach(el => {
+            observer.observe(el);
+            if (el.closest('.hero')) el.classList.add('visible');
+        });
+
+        // 앵커 클릭 시 부드러운 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const id = this.getAttribute('href');
+                if (id === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(id);
+                if (target) {
+                    const y = target.getBoundingClientRect().top + window.pageYOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
